@@ -1,0 +1,207 @@
+﻿using Caliburn.Micro;
+using Microsoft.Band;
+using Microsoft.Band.Sensors;
+using MSBandAzure.Model;
+using MSBandAzure.Mvvm;
+using MSBandAzure.Services;
+using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Diagnostics;
+
+namespace MSBandAzure.ViewModels
+{
+    public class FixedSizedQueue<T> : IEnumerable<T>
+    {
+        private readonly object privateLockObject = new object();
+
+        readonly ConcurrentQueue<T> queue = new ConcurrentQueue<T>();
+
+        public int Size { get; private set; }
+
+        public FixedSizedQueue(int size)
+        {
+            Size = size;
+        }
+
+        public void Enqueue(T obj)
+        {
+            queue.Enqueue(obj);
+
+            lock (privateLockObject)
+            {
+                while (queue.Count > Size)
+                {
+                    T outObj;
+                    queue.TryDequeue(out outObj);
+                }
+            }
+        }
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            return queue.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return queue.GetEnumerator();
+        }
+    }
+
+    public class HeartRateViewModel : DataViewModelBase
+    {
+        public static readonly int BufferSize = 20; 
+        private ITelemetry _telemetry;
+        private IEventAggregator _events;
+
+        public HeartRateViewModel(IBandClient bandClient, ITelemetry telemetry, IEventAggregator events)
+            : base("Heart Rate", bandClient)
+        {
+            _telemetry = telemetry;
+            _events = events;
+            _hrv = new HeartRateValueUpdated { ViewModel = this };
+
+            // Pre-roll some data..
+            _hrData.Enqueue(new HeartRateValue() { Value = 200 });
+            _hrData.Enqueue(new HeartRateValue() { Value = 193 });
+            _hrData.Enqueue(new HeartRateValue() { Value = 186 });
+            _hrData.Enqueue(new HeartRateValue() { Value = 179 });
+            _hrData.Enqueue(new HeartRateValue() { Value = 172 });
+            _hrData.Enqueue(new HeartRateValue() { Value = 165 });
+            _hrData.Enqueue(new HeartRateValue() { Value = 158 });
+            _hrData.Enqueue(new HeartRateValue() { Value = 151 });
+            _hrData.Enqueue(new HeartRateValue() { Value = 144 });
+            _hrData.Enqueue(new HeartRateValue() { Value = 137 });
+            _hrData.Enqueue(new HeartRateValue() { Value = 130 });
+            _hrData.Enqueue(new HeartRateValue() { Value = 123 });
+            _hrData.Enqueue(new HeartRateValue() { Value = 116 });
+            _hrData.Enqueue(new HeartRateValue() { Value = 109 });
+            _hrData.Enqueue(new HeartRateValue() { Value = 102 });
+            _hrData.Enqueue(new HeartRateValue() { Value = 95 });
+            _hrData.Enqueue(new HeartRateValue() { Value = 88 });
+            _hrData.Enqueue(new HeartRateValue() { Value = 81 });
+            _hrData.Enqueue(new HeartRateValue() { Value = 74 });
+            _hrData.Enqueue(new HeartRateValue() { Value = 67 });
+        }
+
+        protected override bool CanStop(object arg)
+        {
+            return _started;
+        }
+
+        protected override async Task<object> Stop(object arg)
+        {
+            await _bandClient.SensorManager.HeartRate.StopReadingsAsync();
+            _bandClient.SensorManager.HeartRate.ReadingChanged -= HeartRate_ReadingChanged;
+            _started = false;
+            return _started;
+        }
+
+        private HeartRateValueUpdated _hrv;
+         
+        protected override bool CanStart(object arg)
+        {
+            return !_started && !IsBusy;
+        }
+
+        protected override async Task<object> Start(object arg)
+        {
+            var band = arg as Band;
+            _bandInfo = band.Info;
+            _bandClient = band.Client;
+            var consent = _bandClient.SensorManager.HeartRate.GetCurrentUserConsent();
+            switch (consent)
+            {
+                case UserConsent.NotSpecified:
+                    await _bandClient.SensorManager.HeartRate.RequestUserConsentAsync();
+                    break;
+                case UserConsent.Declined:
+                    return false;
+            }
+
+            IsBusy = true;
+            ((AsyncDelegateCommand<object>)(StartCmd)).RaiseCanExecuteChanged();
+
+            //App.Events.Publish(new BusyProcessing { IsBusy = true, BusyText = "Starting..." });
+
+            try
+            {
+                _bandClient.SensorManager.HeartRate.ReadingChanged += HeartRate_ReadingChanged;
+                // If the user consent was granted
+                _started = await _bandClient.SensorManager.HeartRate.StartReadingsAsync();
+            }
+            finally
+            {
+                //App.Events.Publish(new BusyProcessing { IsBusy = false, BusyText = "" });
+                IsBusy = false;
+                ((AsyncDelegateCommand<object>)(StopCmd)).RaiseCanExecuteChanged();
+            }
+            return _started;
+        }
+
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
+        async void HeartRate_ReadingChanged(object sender, BandSensorReadingEventArgs<IBandHeartRateReading> e)
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
+        {
+            Debug.WriteLine($"Change notified {DateTime.Now.Second}");
+
+            var hr = e.SensorReading.HeartRate;
+            var ts = e.SensorReading.Timestamp;
+
+            //UpdateHistory(hr);
+            _events.Publish(_hrv);
+
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+            _dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+            {
+                 HeartRate = hr;
+                 TimeStamp = ts.ToString();
+             });
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+            _telemetry.PostTelemetryAsync(new Models.DeviceTelemetry
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+            {
+                DeviceId = _bandInfo.Name,
+                HeartRate = hr,
+                Timestamp = ts.ToString()
+            });
+        }
+
+        private int _heartRate;
+        private IBandInfo _bandInfo;
+
+        public int HeartRate
+        {
+            get { return _heartRate; }
+            set { SetProperty(ref _heartRate, value); }
+        }
+
+        private FixedSizedQueue<HeartRateValue> _hrData = new FixedSizedQueue<HeartRateValue>(BufferSize);
+
+        public IEnumerable<HeartRateValue> HrData
+        {
+            get { return _hrData; }
+        }
+
+        public void UpdateHistory(int newValue)
+        {
+            _hrData.Enqueue(new HeartRateValue { Value = newValue });
+            return;
+        }
+    }
+
+    public class HeartRateValueUpdated
+    {
+        public HeartRateViewModel ViewModel { get; set; }
+    }
+
+    public class HeartRateValue
+    {
+        public int Value { get; set; }
+        public string Name { get { return ""; } }
+    }
+}
