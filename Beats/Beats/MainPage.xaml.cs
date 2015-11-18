@@ -2,15 +2,16 @@
 using Windows.UI.Xaml.Controls;
 using Windows.Devices.Gpio;
 using Windows.UI.Core;
+using System.Threading;
+using System.Threading.Tasks;
 
-namespace Beats_UWP
+namespace Beats
 {
 
     public sealed partial class MainPage : Page
     {
         private const int LED_PIN = 12;
         private GpioPin ledPin;
-        private GpioPinValue ledPinValue = GpioPinValue.High;
 
         public MainPage()
         {
@@ -22,7 +23,7 @@ namespace Beats_UWP
             }
         }
 
-        private void InitGPIO()
+        private async void InitGPIO()
         {
             var gpio = GpioController.GetDefault();
 
@@ -40,10 +41,22 @@ namespace Beats_UWP
 
             System.Diagnostics.Debug.WriteLine("GPIO pins initialized correctly.");
 
-            ledPinValue = (ledPinValue == GpioPinValue.Low) ?
-            GpioPinValue.High : GpioPinValue.Low;
-            ledPin.Write(ledPinValue);
+            while (true)
+            {
+                await changeLEDSpeed(80);
+            }
+                
+        }
+
+        private async Task changeLEDSpeed(int heartRate)
+        {
+            float secondBeats = (4.0f / heartRate) * 20.0f;
+            ledPin.Write(GpioPinValue.Low);
+            await Task.Delay(TimeSpan.FromSeconds(secondBeats));
+            ledPin.Write(GpioPinValue.High);
+            await Task.Delay(TimeSpan.FromSeconds(secondBeats));
         }
 
     }
 }
+
