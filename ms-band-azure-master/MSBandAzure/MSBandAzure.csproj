@@ -17,7 +17,8 @@
     <EnableDotNetNativeCompatibleProfile>true</EnableDotNetNativeCompatibleProfile>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <PackageCertificateKeyFile>Minimal_TemporaryKey.pfx</PackageCertificateKeyFile>
+    <PackageCertificateKeyFile>MSBandAzure_TemporaryKey.pfx</PackageCertificateKeyFile>
+    <PackageCertificateThumbprint>65F00F8BC28C160F76376D7E30E17EBEFD21A6B2</PackageCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
     <DebugSymbols>true</DebugSymbols>
@@ -97,6 +98,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="Minimal_TemporaryKey.pfx" />
+    <None Include="MSBandAzure_TemporaryKey.pfx" />
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>

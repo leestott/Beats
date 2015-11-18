@@ -13,7 +13,8 @@ namespace MSBandAzure.Services
 
         public EventHubsTelemetry()
         {
-            bandTokenServiceLocation = "http://bandontherun.azurewebsites.net/api/getsastoken/dxband";
+            //add your url for your website
+            bandTokenServiceLocation = "http://band1.azurewebsites.net/api/getsastoken/dxband";
 
             RefreshTokenAsync().ContinueWith(t => { });
         }
@@ -31,8 +32,9 @@ namespace MSBandAzure.Services
             _sas = _sas.Trim('"');
 
             // Namespace info.
-            var serviceNamespace = "bandontherun-ns";
-            var hubName = "msbands";
+            //add your service names below
+            var serviceNamespace = "beats-ns";
+            var hubName = "beats";
 
             var url = string.Format("{0}/publishers/{1}/messages", hubName, "dxband"/*deviceTelemetry.DeviceId*/);
             var uriBuilder = new UriBuilder();
