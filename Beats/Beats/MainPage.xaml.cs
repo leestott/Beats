@@ -43,7 +43,7 @@ namespace Beats
 
             while (true)
             {
-                await changeLEDSpeed(80);
+                await changeLEDSpeed(50);
             }
                 
         }
