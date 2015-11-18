@@ -1,15 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.ServiceBus.Messaging;
 using System.Diagnostics;
-
-
+using System.Net.Http;
+using Newtonsoft.Json.Linq;
 
 namespace ConsoleApplication2
 {
+    class SentimentData
+    {
+        public int AverageSentiment { get; set; }
+        public string EventHubName { get; set; }
+    }
+
+
     class SimpleEventProcessor : IEventProcessor
     {
         Stopwatch checkpointStopWatch;
@@ -39,6 +45,21 @@ namespace ConsoleApplication2
 
                 Console.WriteLine(string.Format("Message received.  Partition: '{0}', Data: '{1}'",
                     context.Lease.PartitionId, data));
+
+                int heartRate = Int32.Parse(data);
+
+                //create sentimentdata object
+                var sentimentData = new SentimentData() { AverageSentiment = heartRate, EventHubName = "beats" };
+
+                //post sentimentdata to api
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri("http://reasonsapi.azurewebsites.net");
+                    var response = client.PostAsJsonAsync("/api/sentimentdata", sentimentData).Result;
+                }
+
+
+
             }
 
             //Call checkpoint every 5 minutes, so that worker can resume processing from the 5 minutes back if it restarts.

@@ -1,9 +1,12 @@
 ﻿using System;
 using Windows.UI.Xaml.Controls;
 using Windows.Devices.Gpio;
-using Windows.UI.Core;
-using System.Threading;
 using System.Threading.Tasks;
+using System.Net.Http;
+using System.IO;
+using System.Text;
+using System.Runtime.Serialization.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Beats
 {
@@ -43,12 +46,28 @@ namespace Beats
 
             while (true)
             {
-                await changeLEDSpeed(50);
+                int a = await GetHeartRate();
+                await ChangeLEDSpeed(a);
             }
                 
         }
 
-        private async Task changeLEDSpeed(int heartRate)
+        public async static Task<int> GetHeartRate()
+        {
+            var http = new HttpClient();
+            var url = "http://reasonsapi.azurewebsites.net/api/SentimentData/beats";
+            var response = await http.GetAsync(url);
+            var result = await response.Content.ReadAsStringAsync();
+
+            JToken token = JObject.Parse(result);
+
+            int beat = (int)token.SelectToken("AverageSentiment");
+
+            return beat;
+
+        }
+
+        private async Task ChangeLEDSpeed(int heartRate)
         {
             float secondBeats = (4.0f / heartRate) * 20.0f;
             ledPin.Write(GpioPinValue.Low);
