@@ -34,3 +34,12 @@ MS Band Windows App
 **Manifold.JS**
 - Manifold JS building cross platform Web App
 - Android App for Beats
+
+**ManifoldJS Output**
+- Beats apps for
+- Chrome
+- iOS
+- Cordova
+- Firefox
+- Web
+- Windows 10
