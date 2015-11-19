@@ -1,0 +1,3 @@
+This app uses project westminster for windows 10 https://dev.windows.com/en-us/Bridges/Express
+
+http://microsoftedge.github.io/WebAppsDocs/en-US/win10/HWA.htm
