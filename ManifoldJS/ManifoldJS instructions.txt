@@ -1,0 +1,56 @@
+Simply visit http://manifoldjs.com/ and follow the instructions 
+
+Loads of information on Manifold.JS at http://www.html5hacks.com/ and http://manifoldjs.com/ 
+
+Hosted Web Apps bring the best of the web to store apps with minimal effort.  It allows you to extend the reach of your webapp into the native app space.  Until now, the experience for developing hosted apps has varied from platform to platform.  ManifoldJS changes that by putting the focus on the W3C Manifest for Web Apps – a standards-driven, open source approach for creating apps.
+
+Getting Started
+
+Installing Manifoldjs is easy, if you already have node.js installed, simply use the command:
+> npm install manifoldjs –g
+
+Once installed you can have an app ready for the store in a few easy steps.
+
+Step One:  generate you application projects.  This is as simple as using the command:
+> manifoldjs http://www.yoursite.com
+
+Manifoldjs will look on your site for a W3C manifest and generate your projects from it.  If you don’t have one already, don’t worry, we will still generate the apps, and build a manifest for you.
+
+ 
+Step 2:  Test your apps.  Although hosted apps generally behave just like they do in the corresponding browser (see table below)
+
+Andorid > 4.4 Chrome mobile browser 
+Android < 4.4 Android mobile browser 
+Windows 10 Microsoft Edge browser 
+Windows 8.1 IE11 
+iOS Safari Mobile 
+Chrome OS Chrome Desktop Browser 
+FireFox OS FireFox Desktop Browser 
+
+ You can also test them in each of the environments directly.  See the readme in each platform folder for instruction, but here is a sample:
+
+Windows 10(installs app locally):
+> manifoldjs run windows10
+
+
+Android (in emulator):
+> manifoldjs run Android
+
+
+iOS (in emulator):
+
+open the app in xCode then run the app
+
+ 
+
+Step three: prepare the app package.  For iOS and Android, you will need to open the code in the corispoding editor, you can follow the diretions in each read me or the Manifoldjs Website.
+
+ 
+
+Cloud Appx Packaging
+
+New in Manifoldjs verison 0.4.0 you can now build your appx from any platform, even if you don’t have any windows tools installed.  Before packaging your appx, you’ll want to go to the Microsoft dev center and reserve your app name.  They will then provide you a few app ID info for your manifest before you update (look under app management / info).  Then use the manifoldjs package too:
+> manifoldjs package yourWin10ManifestDir yourAppxNameAndPath
+
+
+From there you’re ready to upload to the store.  This works on any platform: Mac, linux, Windows 10, even Windows 7.
