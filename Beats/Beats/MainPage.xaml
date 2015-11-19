@@ -9,5 +9,6 @@
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
+        <WebView Source="http://beats.azurewebsites.net/" x:Name="UIwebview" Height="Auto" Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  />
     </Grid>
 </Page>

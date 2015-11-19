@@ -80,8 +80,6 @@ namespace ConsoleApplication2
                     var response = client.PostAsJsonAsync("/api/sentimentdata", sentimentData).Result;
                 }
 
-
-
             }
 
             //Call checkpoint every 5 minutes, so that worker can resume processing from the 5 minutes back if it restarts.

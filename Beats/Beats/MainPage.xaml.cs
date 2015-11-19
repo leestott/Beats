@@ -10,6 +10,7 @@ using Newtonsoft.Json.Linq;
 using Windows.UI.Notifications;
 using Windows.Data.Xml.Dom;
 using Windows.UI.Xaml;
+using System.Collections.Generic;
 
 namespace Beats
 {
@@ -20,18 +21,53 @@ namespace Beats
         private GpioPin ledPin;
         private int bpm = 70;
 
+
         public MainPage()
         {
             this.InitializeComponent();
 
-            if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.Devices.GpioController"))
+            if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.Devices.Gpio.GpioController") && Windows.Foundation.Metadata.ApiInformation.IsApiContractPresent("Windows.Devices.Gpio.GpioController", 1))
             {
                 InitGPIO();
             }
+            else
+            {
+                InitApp();             
+            }
+        }
+
+        private async void InitApp()
+        {
+            UIwebview.Navigate(new Uri("http://beats.azurewebsites.net/"));
+            
+            bpm = await GetHeartRate();
 
             TileService.SetBadgeCountOnTile(bpm);
             UpdatePrimaryTile(new PrimaryTile());
-            //sendToastNotification("test");
+
+            while (true)
+            {
+                bpm = await GetHeartRate();
+
+                // Fire notification on heart rate threshold exceeded
+                if (bpm > 80)
+                {
+                    sendToastNotification("Woahh steady on horsey... you feeling ok?");
+                    PrimaryTile tile = new PrimaryTile();
+                    tile.message = "You're pumped!";
+                    UpdatePrimaryTile(tile);
+                }
+                else if (bpm < 50)
+                {
+                    sendToastNotification("Wakey Wakey you Sloth!");
+                    PrimaryTile tile = new PrimaryTile();
+                    tile.message = "You may be dying?!";
+                    UpdatePrimaryTile(tile);
+
+                    TileService.SetBadgeCountOnTile(bpm);
+                }
+            }
+           
         }
 
         private async void InitGPIO()
@@ -55,24 +91,7 @@ namespace Beats
             while (true)
             {
                 bpm = await GetHeartRate();
-
-                // Fire notification on heart rate threshold exceeded
-                if(bpm > 80)
-                {
-                    sendToastNotification("Woahh steady on horsey... you feeling ok?");
-                    PrimaryTile tile = new PrimaryTile();
-                    tile.message = "You're pumped!";
-                    UpdatePrimaryTile(tile);
-                } else if(bpm < 50)
-                {
-                    sendToastNotification("Wakey Wakey you Sloth!");
-                    PrimaryTile tile = new PrimaryTile();
-                    tile.message = "You may be dying?!";
-                    UpdatePrimaryTile(tile);
-                }
-
                 await ChangeLEDSpeed(bpm);
-                TileService.SetBadgeCountOnTile(bpm);
             }
                 
         }
@@ -80,13 +99,13 @@ namespace Beats
         public async static Task<int> GetHeartRate()
         {
             var http = new HttpClient();
-            var url = "http://reasonsapi.azurewebsites.net/api/SentimentData/beats";
+            var url = "http://beatsapi.azurewebsites.net/api/SentimentData/beats";
             var response = await http.GetAsync(url);
             var result = await response.Content.ReadAsStringAsync();
 
             JToken token = JObject.Parse(result);
 
-            int beat = (int)token.SelectToken("AverageSentiment");
+            int beat = (int)token.SelectToken("Heart");
 
             return beat;
 
@@ -116,6 +135,11 @@ namespace Beats
             var updater = TileUpdateManager.CreateTileUpdaterForApplication();
             var notification = new TileNotification(xmlDoc);
             updater.Update(notification);
+        }
+
+        private void test(object sender, RoutedEventArgs e)
+        {
+            
         }
     }
 }
