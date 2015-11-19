@@ -26,18 +26,31 @@ namespace Beats
         {
             this.InitializeComponent();
 
-            if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.Devices.Gpio.GpioController") && Windows.Foundation.Metadata.ApiInformation.IsApiContractPresent("Windows.Devices.Gpio.GpioController", 1))
-            {
-                InitGPIO();
-            }
-            else
-            {
-                InitApp();             
-            }
+            /*
+                Using IsApiContractPresent (below) does not seem to work on the RPi (it crashes). And when using the IsTypePresent, 
+                when running the app on the PC it still runs the GPIO method, even though it is not a GPIO device.
+
+                 Windows.Foundation.Metadata.ApiInformation.IsApiContractPresent("Windows.Devices.Gpio.GpioController", 1)
+
+                Uncomment or comment sections of the code below to get this to work. This is not ideal but I will update the code when
+                I find a solution.
+
+            */
+
+
+            /* For the above reason, uncomment this if you are running on the RPi, and comment this out if running on anything else */
+            //if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.Devices.Gpio.GpioController"))
+            //{
+            //    InitGPIO();
+            //}
+
+            /* Uncomment this if running on PC/Mobile, comment this out if running on RPi */
+            //InitApp();             
         }
 
         private async void InitApp()
         {
+            /* JS websites/webapps do not update when run through webview which is currently an issue - you just get a static page */
             UIwebview.Navigate(new Uri("http://beats.azurewebsites.net/"));
             
             bpm = await GetHeartRate();
