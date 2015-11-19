@@ -48,17 +48,37 @@ namespace ConsoleApplication2
                 Console.WriteLine(string.Format("Message received.  Partition: '{0}', Data: '{1}'",
                     context.Lease.PartitionId, data));
 
-               // int heartRate = Int32.Parse(data);
+                JToken token = JObject.Parse(data);
 
-                ////create sentimentdata object
-                //var sentimentData = new SentimentData() { Heart = heartRate, Temp = heartRate, Steps = heartRate, Name = "beats" };
+                string measure = (string)token.SelectToken("measurename");
+                int temp = 30;
+                int heart = 80;
 
-                ////post sentimentdata to api
-                //using (var client = new HttpClient())
-                //{
-                //    client.BaseAddress = new Uri("http://beatsapi.azurewebsites.net");
-                //    var response = client.PostAsJsonAsync("/api/sentimentdata", sentimentData).Result;
-                //}
+
+                if (measure == "SkinTemperature")
+                {
+                    temp = (int)token.SelectToken("value");
+                    Console.WriteLine(measure + " " + temp);
+                }
+                else if(measure == "HeartRate")
+                {
+                    heart = (int)token.SelectToken("value");
+                    Console.WriteLine(measure + " " + heart);
+                }
+
+
+                Console.WriteLine(measure + " " + temp);
+
+                
+                //create sentimentdata object
+                var sentimentData = new SentimentData() { Heart = heart, Temp = temp, Steps = 5000, Name = "beats" };
+
+                //post sentimentdata to api
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri("http://beatsapi.azurewebsites.net");
+                    var response = client.PostAsJsonAsync("/api/sentimentdata", sentimentData).Result;
+                }
 
 
 
@@ -80,7 +100,7 @@ namespace ConsoleApplication2
 
         static void Main(string[] args)
         {
-            string eventHubConnectionString = "Endpoint=sb://beats-ns.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=AqPi7c7I3JkVZQ9OGUjt3aEtW1GJ4voOgB+wagPZydY=";
+            string eventHubConnectionString = "Endpoint=sb://beats-ns.servicebus.windows.net/;SharedAccessKeyName=manage;SharedAccessKey=hyZPOugpflLQ6/nIlwzKh3uqwtQa1NwLOOL9yxWPR+s=";
             string eventHubName = "beats";
             string storageAccountName = "beast";
             string storageAccountKey = "qIol5cl06GF1OO8anp2r5Kl1yCR7WcBQcTUSSZ3Ta48Knrrl6vpTgAWhyrRTR1C/54BAvKMbuXOjSuak7UpMBw==";
