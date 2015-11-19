@@ -1,0 +1,25 @@
+<tile>
+  <visual>
+
+    <binding template="TileSmall">
+      <text hint-align="center">BPM</text>
+      <text hint-align="center" hint-style="body">22</text>
+    </binding>
+
+    <binding template="TileMedium">
+      <text hint-align="center">BPM</text>
+      <text hint-align="center" hint-style="body">22</text>
+    </binding>
+
+    <binding template="TileWide">
+      <text hint-align="center" >BPM</text>
+      <text hint-align="center" hint-style="body">22</text>
+    </binding>
+
+    <binding template="TileLarge">
+      <text hint-align="center">BPM</text>
+      <text hint-align="center" hint-style="body">22</text>
+    </binding>
+
+  </visual>
+</tile>

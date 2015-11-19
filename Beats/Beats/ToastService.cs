@@ -24,11 +24,11 @@ namespace Beats
                 new XElement("actions",
                 new XElement("action",
                 new XAttribute("activationType", "foreground"),
-                new XAttribute("content", "Yes"),
+                new XAttribute("content", "I'm Okay"),
                 new XAttribute("arguments", "yes")),
                 new XElement("action",
                 new XAttribute("activationType", "foreground"),
-                new XAttribute("content", "No"),
+                new XAttribute("content", "Help me!"),
                 new XAttribute("arguments", "no")))
                 // actions
                 ));

@@ -9,6 +9,7 @@ using System.Runtime.Serialization.Json;
 using Newtonsoft.Json.Linq;
 using Windows.UI.Notifications;
 using Windows.Data.Xml.Dom;
+using Windows.UI.Xaml;
 
 namespace Beats
 {
@@ -17,6 +18,7 @@ namespace Beats
     {
         private const int LED_PIN = 12;
         private GpioPin ledPin;
+        private int bpm = 70;
 
         public MainPage()
         {
@@ -27,6 +29,8 @@ namespace Beats
                 InitGPIO();
             }
 
+            TileService.SetBadgeCountOnTile(bpm);
+            UpdatePrimaryTile(new PrimaryTile());
             //sendToastNotification("test");
         }
 
@@ -50,15 +54,25 @@ namespace Beats
 
             while (true)
             {
-                int a = await GetHeartRate();
+                bpm = await GetHeartRate();
 
                 // Fire notification on heart rate threshold exceeded
-                if(a > 70)
+                if(bpm > 80)
                 {
                     sendToastNotification("Woahh steady on horsey... you feeling ok?");
+                    PrimaryTile tile = new PrimaryTile();
+                    tile.message = "You're pumped!";
+                    UpdatePrimaryTile(tile);
+                } else if(bpm < 50)
+                {
+                    sendToastNotification("Wakey Wakey you Sloth!");
+                    PrimaryTile tile = new PrimaryTile();
+                    tile.message = "You may be dying?!";
+                    UpdatePrimaryTile(tile);
                 }
 
-                await ChangeLEDSpeed(a);
+                await ChangeLEDSpeed(bpm);
+                TileService.SetBadgeCountOnTile(bpm);
             }
                 
         }
@@ -95,19 +109,14 @@ namespace Beats
             notifier.Show(toast);
         }
 
-        private void sendTileNotifications()
+        private void UpdatePrimaryTile(PrimaryTile tile)
         {
-            // Load the string into an XmlDocument
-            XmlDocument doc = new XmlDocument();
-            doc.LoadXml("someXML");
+            var xmlDoc = TileService.CreateTiles(tile);
 
-            // Then create the tile notification
-            var notification = new TileNotification(doc);
-
-            // And send the notification
-            TileUpdateManager.CreateTileUpdaterForApplication().Update(notification);
+            var updater = TileUpdateManager.CreateTileUpdaterForApplication();
+            var notification = new TileNotification(xmlDoc);
+            updater.Update(notification);
         }
-
     }
 }
 
