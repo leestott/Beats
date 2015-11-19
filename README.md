@@ -4,10 +4,14 @@ MS Band Windows App
 **Folder Structure**
 
 **Azure Backend** 
-- Microsoft Azure SignalR service 
-- Microsoft Azure Event Hubs Setup
+ 
+- Microsoft Azure Event Hubs Setup this is the one we used
+-- Useful Resources for Azure Services-
+- Microsoft Azure SignalR service
 - Microsoft OpenTec Connecting the Dots - Windows Phone + Band app used to get the data input \Azure Backend\connectthedots-master\Devices\DirectlyConnectedDevices\WindowsPhoneAndBand
 - Source control for the hack we used a custom Event hubs
+- - Band on the Run Client - This is a test app for Windows Phone and Azure Event Hub - good learning resource
+
 
 
 **Beats UWP App**
@@ -28,8 +32,6 @@ MS Band Windows App
 **Web App**
 - Html5/JS app with responsive UI using Azure Website
 
-**Windows Phone Client + Band SDK**
-- Band on the Run Client - This is a test app for Windows Phone and Azure Event Hub - good learning resource
 
 **Manifold.JS**
 - Manifold JS building cross platform Web App
