@@ -26,6 +26,8 @@ namespace Beats
             {
                 InitGPIO();
             }
+
+            //sendToastNotification("test");
         }
 
         private async void InitGPIO()

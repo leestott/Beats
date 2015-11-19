@@ -7,6 +7,7 @@ using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -114,27 +115,34 @@ namespace Beats
                 if (argument.ToLower() == "yes")
                 {
                     // user is OK
+                    PlayMusic("beer.wav");
                 }
                 else if (argument.ToLower() == "no")
                 {
                     // user no OK
-                    // play music
-                    PlayMusic();
+                    PlayMusic("doh.wav");
                 }
             }
             //...
         }
 
-        private void PlayMusic()
+        private async void PlayMusic(string path)
         {
-            /*MediaElement PlayMusicElement = new MediaElement();
-            PlayMusicElement.AudioCategory = Windows.UI.Xaml.Media.AudioCategory.Media;
+            try
+            {
+                MediaElement PlayMusicElement = new MediaElement();
+                PlayMusicElement.AudioCategory = Windows.UI.Xaml.Media.AudioCategory.Media;
 
-            StorageFolder Folder = Windows.ApplicationModel.Package.Current.InstalledLocation;
-            Folder = await Folder.GetFolderAsync("Sounds");
-            StorageFile sf = await Folder.GetFileAsync("modem.wav");
-            PlayMusicElement.SetSource(await sf.OpenAsync(FileAccessMode.Read), sf.ContentType);
-            PlayMusicElement.Play();*/
+                StorageFolder Folder = Windows.ApplicationModel.Package.Current.InstalledLocation;
+                Folder = await Folder.GetFolderAsync("Assets");
+                StorageFile sf = await Folder.GetFileAsync(path);
+                PlayMusicElement.SetSource(await sf.OpenAsync(FileAccessMode.Read), sf.ContentType);
+                PlayMusicElement.Play();
+            }
+            catch
+            {
+                // swallow this... sure it'll be fine ;)
+            }
         }
     }
 }

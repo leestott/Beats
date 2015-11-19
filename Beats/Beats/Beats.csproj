@@ -109,6 +109,8 @@
     <None Include="Beats_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\beer.wav" />
+    <Content Include="Assets\doh.wav" />
     <Content Include="Assets\logo150x150.png" />
     <Content Include="Assets\logo44x44.png" />
     <Content Include="Assets\Square150x150Logo.scale-100.png" />
