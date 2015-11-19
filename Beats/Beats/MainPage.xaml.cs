@@ -7,6 +7,8 @@ using System.IO;
 using System.Text;
 using System.Runtime.Serialization.Json;
 using Newtonsoft.Json.Linq;
+using Windows.UI.Notifications;
+using Windows.Data.Xml.Dom;
 
 namespace Beats
 {
@@ -20,7 +22,7 @@ namespace Beats
         {
             this.InitializeComponent();
 
-            if (Windows.Foundation.Metadata.ApiInformation.IsApiContractPresent("Windows.Devices.DevicesLowLevelContract", 1))
+            if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.Devices.GpioController"))
             {
                 InitGPIO();
             }
@@ -47,6 +49,13 @@ namespace Beats
             while (true)
             {
                 int a = await GetHeartRate();
+
+                // Fire notification on heart rate threshold exceeded
+                if(true)//a > 70)
+                {
+                    sendToastNotification("Woahh steady on horsey... you feeling ok?");
+                }
+
                 await ChangeLEDSpeed(a);
             }
                 
@@ -74,6 +83,27 @@ namespace Beats
             await Task.Delay(TimeSpan.FromSeconds(secondBeats));
             ledPin.Write(GpioPinValue.High);
             await Task.Delay(TimeSpan.FromSeconds(secondBeats));
+        }
+
+        private void sendToastNotification(string msg)
+        {
+            var xmlDoc = ToastService.CreateToast(msg);
+            var notifier = ToastNotificationManager.CreateToastNotifier();
+            var toast = new ToastNotification(xmlDoc);
+            notifier.Show(toast);
+        }
+
+        private void sendTileNotifications()
+        {
+            // Load the string into an XmlDocument
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml("someXML");
+
+            // Then create the tile notification
+            var notification = new TileNotification(doc);
+
+            // And send the notification
+            TileUpdateManager.CreateTileUpdaterForApplication().Update(notification);
         }
 
     }
