@@ -101,5 +101,40 @@ namespace Beats
             //TODO: Save application state and stop any background activity
             deferral.Complete();
         }
+
+        async protected override void OnActivated(IActivatedEventArgs args)
+        {
+            //Initialize your app if it's not yet initialized;
+            //Find out if this is activated from a toast;
+            if (args.Kind == ActivationKind.ToastNotification)
+            {
+                //Get the pre-defined arguments and user inputs from the eventargs;
+                var toastArgs = args as ToastNotificationActivatedEventArgs;
+                var argument = toastArgs.Argument;
+                if (argument.ToLower() == "yes")
+                {
+                    // user is OK
+                }
+                else if (argument.ToLower() == "no")
+                {
+                    // user no OK
+                    // play music
+                    PlayMusic();
+                }
+            }
+            //...
+        }
+
+        private void PlayMusic()
+        {
+            /*MediaElement PlayMusicElement = new MediaElement();
+            PlayMusicElement.AudioCategory = Windows.UI.Xaml.Media.AudioCategory.Media;
+
+            StorageFolder Folder = Windows.ApplicationModel.Package.Current.InstalledLocation;
+            Folder = await Folder.GetFolderAsync("Sounds");
+            StorageFile sf = await Folder.GetFileAsync("modem.wav");
+            PlayMusicElement.SetSource(await sf.OpenAsync(FileAccessMode.Read), sf.ContentType);
+            PlayMusicElement.Play();*/
+        }
     }
 }
