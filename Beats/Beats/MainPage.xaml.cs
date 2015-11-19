@@ -26,6 +26,8 @@ namespace Beats
             {
                 InitGPIO();
             }
+
+            sendToastNotification("This is a test toast notification");
         }
 
         private async void InitGPIO()
@@ -51,7 +53,7 @@ namespace Beats
                 int a = await GetHeartRate();
 
                 // Fire notification on heart rate threshold exceeded
-                if(true)//a > 70)
+                if(a > 70)
                 {
                     sendToastNotification("Woahh steady on horsey... you feeling ok?");
                 }
