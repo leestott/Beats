@@ -1,0 +1,46 @@
+Azure backend
+
+0/Create 1 storage 
+	Save the name and access key for later 
+
+1 /EventHub
+
+Create a new Event Hub
+	In the configuration, create several Shared Access Key, select "Manage"  	Add a consumer group  
+Save all names & keys for later, you will need it to connect your clients 
+ 
+	One key will be used to collect all data.
+	One key to debug the event hub through the console app 
+	One key for the Stream Analitic 
+
+2/Stream Analytics
+Create a Stream Analytics
+
+Create an input 
+	Select the Event Hub add the consumergroup created in Step1
+Create an output 
+	Link it to the storage created in step 0.  
+ 
+Edit the query - Some example depending on the output selected  
+
+	** banddatatostorage = use with a blob storage output
+	** RealTimeBand = Use with a PowerBI output
+	** datatoeventhub = output event hub not same as input
+	SELECT displayname, measurename, value, timecreated
+	INTO banddatatostorage
+	FROM banddata
+    
+	SELECT displayname, measurename, value, timecreated
+	INTO RealTimeBand
+	FROM banddata
+    
+	SELECT Avg(value) AS AvgValue, measurename
+	INTO datatoeventhub
+	FROM banddata
+	GROUP BY TumblingWindow(second,5), measurename
+
+
+Start the StreamAnalytics, data should arrive in your Storage and all output selected. 
+
+You can use the 2 app console available in the GitHub project to test it. 
+Don't forget to change the Access Key and enjoy! 
