@@ -115,7 +115,7 @@ namespace Beats
                 if (argument.ToLower() == "yes")
                 {
                     // user is OK
-                    PlayMusic("beer.wav");
+                    PlayMusic("ahh.wav");
                 }
                 else if (argument.ToLower() == "no")
                 {
