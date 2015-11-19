@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{5a3b946a-a0e3-40d6-aefb-524f6edb2f1c}</ProjectGuid>
+    <ProjectGuid>{5A3B946A-A0E3-40D6-AEFB-524F6EDB2F1C}</ProjectGuid>
     <OutputType>AppContainerExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ConnectTheDotsWPBand</RootNamespace>
@@ -17,7 +17,8 @@
     <NuGetPackageImportStamp>14bd4356</NuGetPackageImportStamp>
     <ApplicationInsightsResourceId>/subscriptions/cbad14a1-0e6f-41ff-8f17-e0f1a8c0fc5e/resourcegroups/Default-ApplicationInsights-CentralUS/providers/microsoft.insights/components/PhoneEventHub</ApplicationInsightsResourceId>
     <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
-    <AppxBundlePlatforms>neutral</AppxBundlePlatforms>
+    <AppxBundlePlatforms>arm</AppxBundlePlatforms>
+    <AppxBundle>Auto</AppxBundle>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
