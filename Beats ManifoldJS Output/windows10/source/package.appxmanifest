@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Package
+  xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
+  xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest"
+  xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+  xmlns:build="http://schemas.microsoft.com/developer/appx/2015/build"
+  IgnorableNamespaces="uap mp build">
+
+  <Identity
+    Name="7961f829-8860-9191-84f7-0b2ddc204b3d"
+    Version="1.0.0.0"
+    Publisher="CN=user" />
+
+  <mp:PhoneIdentity PhoneProductId="7961f829-8860-9191-84f7-0b2ddc204b3d" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
+  
+  <build:Metadata>
+    <build:Item Name ="ManifoldJSVersion" Value ="0.4.2" />
+    <build:Item Name ="GeneratedFrom" Value ="CLI" />
+    <build:Item Name ="GenerationDate" Value ="2015-11-19 16:16:51 Z" />
+  </build:Metadata>
+
+  <Properties>
+    <DisplayName>BeatsAzurewebsitesNet</DisplayName>
+    <PublisherDisplayName>user</PublisherDisplayName>
+    <Logo>images\storelogo.png</Logo>
+  </Properties>
+
+  <Dependencies>
+    <TargetDeviceFamily Name="Windows.Universal" MinVersion="10.0.0.0" MaxVersionTested="10.0.0.0" />
+  </Dependencies>
+
+  <Resources>
+    <Resource Language="x-generate" />
+  </Resources>
+
+  <Applications>
+    <Application
+      Id="BeatsAzurewebsitesNet"
+      StartPage="http://beats.azurewebsites.net/">
+
+      <uap:VisualElements
+        DisplayName="BeatsAzurewebsitesNet"
+        Description="BeatsAzurewebsitesNet"
+        BackgroundColor="blue"
+        Square150x150Logo="images\logo.png"
+        Square44x44Logo="images\smalllogo.png">
+
+        <uap:SplashScreen Image="images\splashscreen.png" />
+
+        <uap:InitialRotationPreference>
+          <uap:Rotation Preference="portrait" />
+        </uap:InitialRotationPreference>
+      </uap:VisualElements>
+      
+      <uap:ApplicationContentUriRules>
+        <uap:Rule Type="include" WindowsRuntimeAccess="none" Match="http://beats.azurewebsites.net/" />
+      </uap:ApplicationContentUriRules>
+    </Application>
+  </Applications>
+
+  <Capabilities>
+    <Capability Name="internetClient" />
+  </Capabilities>
+
+</Package>

@@ -1,0 +1,8 @@
+{
+    "name": "BeatsAzurewebsitesNet",
+    "description": "Content from http://beats.azurewebsites.net/",
+    "launch_path": "/",
+    "icons": {
+        "128": "icon128.png"
+    }
+}

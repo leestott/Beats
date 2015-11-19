@@ -1,0 +1,13 @@
+{
+    "manifest_version": 2,
+    "name": "http://beats.azurewebsites.net/",
+    "version": "0.0.1",
+    "app": {
+        "launch": {
+            "web_url": "http://beats.azurewebsites.net/"
+        }
+    },
+    "icons": {
+        "128": "icon128.png"
+    }
+}
