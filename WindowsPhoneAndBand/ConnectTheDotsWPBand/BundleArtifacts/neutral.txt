@@ -1,2 +1,0 @@
-MainPackage=C:\Users\leestott\Documents\GitHub\Beats\WindowsPhoneAndBand\ConnectTheDotsWPBand\bin\Release\ConnectTheDotsWPBand_1.1.0.7_AnyCPU.appx
-SymbolPackage=C:\Users\leestott\Documents\GitHub\Beats\WindowsPhoneAndBand\ConnectTheDotsWPBand\AppPackages\ConnectTheDotsWPBand_1.1.0.7_Test\ConnectTheDotsWPBand_1.1.0.7_AnyCPU.appxsym
