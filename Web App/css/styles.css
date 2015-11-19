@@ -1,0 +1,88 @@
+
+    html, body { margin: 0; padding: 0; width: 100%; }
+  
+    body { background-color: #f6edef; text-align: center; font-family: "Segoe UI Light"; overflow-x: hidden; }
+  
+    header { z-index: 100; font-size: 0; background: transparent url(/img/kids/ponytail.png) no-repeat bottom center; background-size: 100% auto; position: fixed; bottom: 0; right: 50%; margin-right: -150px; height: 400px; width: 300px; } 
+    
+    article { width: 70%; }
+    
+    h1 { font-size: 2.2em; background-color: #fff; color: #000; width: 100%; margin: 0; padding: .5em 1em; text-align: left;  }
+      h1 span { color: #a3a1a4; font-size: .5em; text-transform: uppercase; }
+    section { display: block; height: 300px; padding: 1%; margin: 5%; float: left; width: 300px; position: relative; overflow: hidden; }
+    
+    #heartrate { background-color: #f1511b; }
+    #steps { background-color: #80cc28; }
+    #temperature { background-color: #fbbc09; }
+    
+    
+    #heartrate .heart { width: 70%; height: auto; margin: 0 auto; position: relative; top: 0;
+      animation-name: pulsate; animation-timing-function: ease-in-out; animation-iteration-count: infinite; 
+      -webkit-animation-name: pulsate; -webkit-animation-timing-function: ease-in-out; -webkit-animation-iteration-count: infinite; }
+      
+      @keyframes pulsate {
+        0% { width:80%; }
+        50% { width:80%; }
+        90% { width:100%; }
+        100% { width:80%; }
+      } 
+      
+      
+    #steps .feet { width: 40%; height: auto; margin: 0 auto; margin-top: -1em; animation: move 3s ease infinite; }
+      #steps #foot-left { animation-name: move-left; -webkit-animation-name: move-left; position: relative; top: 2em; }
+      #steps #foot-right { animation-name: move-right; -webkit-animation-name: move-right; }
+      
+      @keyframes move-left {
+        50% { transform: translate(0, -2em); }
+      }
+      @keyframes move-right {
+        50% { transform: translate(0, 2em); }
+      }
+    
+    #temperature .temp { width: 40%; position: relative; top: -2em; }
+    #temperature div { position: relative; }
+    #temperature div span { width: 8%; background-color: #fff; position: absolute; font-size: 0; height: 37%; bottom: 10%; margin-bottom: 30%; left: 50%; margin-left: -4% }
+    
+      section em { color: white; font-size: 5em; font-weight: bold; margin: 0 auto; padding: 0; margin-top: .5em; display: block; font-style: normal; width: 92%; height: 1.5em; line-height: .4em; }
+      section em span { font-size: .2em; margin-left: -20px; }
+  
+  body { border-top: 2px solid white ; }  
+  
+  section { width: 25%; margin: 2%; height: 460px; }
+  header { right: 15%; }
+
+@media screen and (max-width: 1024px) {
+  
+  article { width: 100%; }
+/*  body { border-top: 2px solid blue; } */
+  section { width: 27%; }
+  h1 { position: relative; height: 3em; }
+  header { position: absolute; right: 270px; width: 100px; }
+  
+}
+@media screen and (max-width: 720px) {
+  
+ /* body { border-top: 2px solid yellow; }*/
+  section { height: 330px; }
+  h1 { position: relative; height: 3em; }
+  h1 span { display: block; position: relative; left: 2px; }
+  
+}
+@media screen and (max-width: 548px) {
+  
+ /*  body { border-top: 2px solid orange; }*/
+  
+  section { width: 93.5%; height: 185px; }
+  section em { line-height: 1.2em; float: left; width: 55%; }
+  section div { float: left; width: 40%; margin-top: 2em; }
+  #temperature div span { left: 70%; }
+  #temperature div { top: 1em; }
+  article { width: 100%; }
+   
+  
+}
+@media screen and (max-width: 320px) {
+/*  body { border-top: 2px solid red; }*/
+  
+  
+}
