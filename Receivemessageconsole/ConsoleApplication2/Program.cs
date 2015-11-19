@@ -11,8 +11,10 @@ namespace ConsoleApplication2
 {
     class SentimentData
     {
-        public int AverageSentiment { get; set; }
-        public string EventHubName { get; set; }
+        public int Heart { get; set; }
+        public int Temp { get; set; }
+        public int Steps { get; set; }
+        public string Name { get; set; }
     }
 
 
@@ -46,17 +48,17 @@ namespace ConsoleApplication2
                 Console.WriteLine(string.Format("Message received.  Partition: '{0}', Data: '{1}'",
                     context.Lease.PartitionId, data));
 
-                int heartRate = Int32.Parse(data);
+               // int heartRate = Int32.Parse(data);
 
-                //create sentimentdata object
-                var sentimentData = new SentimentData() { AverageSentiment = heartRate, EventHubName = "beats" };
+                ////create sentimentdata object
+                //var sentimentData = new SentimentData() { Heart = heartRate, Temp = heartRate, Steps = heartRate, Name = "beats" };
 
-                //post sentimentdata to api
-                using (var client = new HttpClient())
-                {
-                    client.BaseAddress = new Uri("http://reasonsapi.azurewebsites.net");
-                    var response = client.PostAsJsonAsync("/api/sentimentdata", sentimentData).Result;
-                }
+                ////post sentimentdata to api
+                //using (var client = new HttpClient())
+                //{
+                //    client.BaseAddress = new Uri("http://beatsapi.azurewebsites.net");
+                //    var response = client.PostAsJsonAsync("/api/sentimentdata", sentimentData).Result;
+                //}
 
 
 
@@ -78,7 +80,7 @@ namespace ConsoleApplication2
 
         static void Main(string[] args)
         {
-            string eventHubConnectionString = "Endpoint=sb://beats-ns.servicebus.windows.net/;SharedAccessKeyName=receiverule;SharedAccessKey=QB6o8Zw57DbGUYM9H4iG5NIAyTMoU9/HMpZalnRz7TM=";
+            string eventHubConnectionString = "Endpoint=sb://beats-ns.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=AqPi7c7I3JkVZQ9OGUjt3aEtW1GJ4voOgB+wagPZydY=";
             string eventHubName = "beats";
             string storageAccountName = "beast";
             string storageAccountKey = "qIol5cl06GF1OO8anp2r5Kl1yCR7WcBQcTUSSZ3Ta48Knrrl6vpTgAWhyrRTR1C/54BAvKMbuXOjSuak7UpMBw==";
